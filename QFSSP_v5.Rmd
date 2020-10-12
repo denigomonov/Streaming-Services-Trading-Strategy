@@ -1,0 +1,256 @@
+---
+title: "Quant Finance (Streaming Services Portfolio)"
+output: html_document
+---
+
+## Acquiring Data
+Acquiring data from Yahoo Finance of AAPL, NFLX, ROKU, SPOT, DIS equities
+```{r}
+library(plotly)
+library(ggplot2)
+library(quantmod)
+library(PerformanceAnalytics)
+library(dplyr)
+
+#starting data
+dt<-'2018-2-1'
+#getting data
+aapl_df<-data.frame(getSymbols.yahoo('AAPL', from=dt, auto.assign=F))
+nflx_df<-data.frame(getSymbols.yahoo('NFLX', from=dt, auto.assign=F))
+roku_df<-data.frame(getSymbols.yahoo('ROKU', from=dt, auto.assign=F))
+spot_df<-data.frame(getSymbols.yahoo('SPOT', from=dt, auto.assign=F))
+dis_df<-data.frame(getSymbols.yahoo('DIS', from=dt, auto.assign=F))
+```
+## Data Overview
+Looking at SPOT equity data as an example 
+```{r}
+spot_table<-head(spot_df,10)
+spot_table
+```
+## Data Preparation
+Manipulating raw equity data for future analysis
+```{r}
+
+data_prep_func<-function(x, y){
+  #sma
+  sma10<-SMA(x[6], n=10)
+  #ema
+  ema20<-EMA(x[6], n=20)
+  #BBands
+  bbands20 <- data.frame(BBands( Cl(x), n=20, sd=2))
+  bbands20 <- bbands20[,c(1,3)]
+  #changing colnames
+  colnames(sma10)<-c(paste0(y,'.SMA'))
+  colnames(ema20)<-c(paste0(y,'.EMA'))
+  colnames(bbands20)<-c(paste0(y,'.dn'), paste0(y,'.up'))
+  #merge/formatting
+  new_df<-x
+  new_df<-cbind(new_df, sma10)
+  new_df<-cbind(new_df, ema20)
+  new_df<-cbind(new_df, bbands20)
+  new_df<-cbind(Date=rownames(new_df), new_df)
+  rownames(new_df)<-1:nrow(new_df)
+  #volume differentiation calc
+  for(v in 1:length(new_df[,1])){
+    if(new_df[v, 5] >= new_df[v, 2]){
+      new_df[v, 'volumetype']='Increasing'
+    } else if(abs(new_df[v, 5]-new_df[v,2]) < 0.4){
+      new_df[v, 'volumetype']='Doji'
+    } else {
+      new_df[v, 'volumetype']='Decreasing'
+    }
+  }
+  #return
+  return(new_df)
+}
+#running func
+aapl_df<-data_prep_func(aapl_df, 'AAPL')
+dis_df<-data_prep_func(dis_df, 'DIS')
+nflx_df<-data_prep_func(nflx_df, 'NFLX')
+roku_df<-data_prep_func(roku_df, 'ROKU')
+spot_df<-data_prep_func(spot_df, 'SPOT')
+```
+## Data Visualization
+Creating a dynamic plot with Plotly lib
+```{r}
+data_viz1_func<-function(df, eq_name){
+  #starting data
+  dt<-'2018-2-1'
+  #today's date
+  today_date<-Sys.Date()
+  #plot
+  candle_fig <- plot_ly(x = df[[1]], type="candlestick",
+                      open = df[[2]], close = df[[5]],
+                      high = df[[3]], low = df[[4]], name=eq_name,
+                      width=900, height=800)
+  candle_fig <- candle_fig %>% add_lines(x = df[[1]], y = df[[8]],
+                                       line = list(color = 'rgb(255, 153, 102)',
+                                                   width = 0.8),
+                                       name='SMA-10', inherit = F)
+  candle_fig <- candle_fig %>% add_lines(x = df[[1]], y = df[[9]],
+                                       line = list(color='blue',
+                                                   width=0.8),
+                                       name='EMA-20', inherit = F)
+  candle_fig <- candle_fig %>% add_lines(x = df[[1]], y = df[[10]],
+                                       line = list(color='#dad3e0',
+                                                   width=0.8,
+                                                   opacity=0.6),
+                                       name='BBands.dn', inherit = F)
+  candle_fig <- candle_fig %>% add_lines(x = df[[1]], y = df[[11]],
+                                       line = list(color='#dad3e0',
+                                                   width=0.8,
+                                                   opacity=0.6),
+                                       name='BBAnds.up', inherit = F)
+  volume_fig <- aapl_df %>% plot_ly(x= df[[1]], y= df[[6]],
+                                  type='bar', name = df[[12]],
+                                  color= df[[12]],
+                                  colors=c('#ff9999',
+                                           '#ffff99',
+                                           '#99ffb3')
+                                  )
+  #layout
+  volume_fig <- volume_fig %>% layout(yaxis=list(title='Volume',
+                                               titlefont=list(size=15)))
+  final_fig <- subplot(candle_fig, volume_fig, heights = c(0.7,0.2), nrows=2,
+               shareX = TRUE, titleY = TRUE)
+  final_fig <- final_fig %>% layout(
+    title=list(text=paste0(eq_name,': ',dt,' - ',as.character(today_date)),
+               font=list(size=22), y = 0.97),
+    xaxis=list(type='date', tickformat = "%d %B <br>%Y",
+               title=FALSE, tickfont=list(size=14)),
+    yaxis=list(title="Price", titlefont=list(size=16),
+               tickfont=list(size=14)),
+    legend=list(orientation = 'h', x = 0.5, y = 0.93,
+                xanchor = 'center', font = list(size=12),
+                bgcolor = 'transparent')
+  
+  )
+  #show
+  final_fig
+}
+```
+### Apple (AAPL) Graph
+```{r}
+data_viz1_func(aapl_df, 'AAPL')
+```
+### Disney (DIS) Graph
+```{r}
+data_viz1_func(dis_df, 'DIS')
+```
+### Netflix (NFLX) Graph
+```{r}
+data_viz1_func(nflx_df, 'NFLX')
+```
+### Roku (ROKU) Graph
+```{r}
+data_viz1_func(roku_df, 'ROKU')
+```
+### Spotify (SPOT) Graph
+```{r}
+data_viz1_func(spot_df, 'SPOT')
+```
+## Portfolio Analysis
+Analysis of returns and equally weighted portfolio case study
+
+Performance of selected equities independently
+```{r}
+#'AAPL', 'DIS', 'NFLX', 'ROKU', 'SPOT'
+aapl_dret<-na.omit(dailyReturn(Ad(getSymbols.yahoo('AAPL',
+                                        from=dt,
+                                        periodicity='daily',
+                                        auto.assign=F)), type='arithmetic'))
+dis_dret<-na.omit(dailyReturn(Ad(getSymbols.yahoo('DIS',
+                                        from=dt,
+                                        periodicity='daily',
+                                        auto.assign=F)), type='arithmetic'))
+nflx_dret<-na.omit(dailyReturn(Ad(getSymbols.yahoo('NFLX',
+                                        from=dt,
+                                        periodicity='daily',
+                                        auto.assign=F)), type='arithmetic'))
+roku_dret<-na.omit(dailyReturn(Ad(getSymbols.yahoo('ROKU',
+                                        from=dt,
+                                        periodicity='daily',
+                                        auto.assign=F)), type='arithmetic'))
+spot_dret<-na.omit(dailyReturn(Ad(getSymbols.yahoo('SPOT',
+                                        from=dt,
+                                        periodicity='daily',
+                                        auto.assign=F)), type='arithmetic'))
+#renaming cols
+colnames(aapl_dret)<-'AAPL.Ad.Returns'
+colnames(dis_dret)<-'DIS.Ad.Returns'
+colnames(nflx_dret)<-'NFLX.Ad.Returns'
+colnames(roku_dret)<-'ROKU.Ad.Returns'
+colnames(spot_dret)<-'SPOT.Ad.Returns'
+#merging
+dret_data<-cbind(aapl_dret,dis_dret,
+                 nflx_dret,roku_dret,spot_dret)
+
+
+table.AnnualizedReturns(dret_data, scale=252, Rf=0.015/252)
+```
+```{r fig.height=10}
+#plotting performance
+charts.PerformanceSummary(dret_data, main='Portfolio Performance',
+                          Rf=0.015/252, plot.engine='default')
+```
+
+Equally weighted portfolio case study and analysis
+```{r}
+#eq weighted portfolio
+portret_df<-Return.portfolio(dret_data,
+                             weights=c(.20,.20,.20,.20,.20))
+colnames(portret_df)<-'Porfolio.Eqw.Returns'
+
+#performance benchmark
+benchmarkPrices<-na.omit(dailyReturn(Ad(getSymbols.yahoo('^GSPC',
+                                        from=dt,
+                                        periodicity='daily',
+                                        auto.assign=F)),
+                                     type='arithmetic'))
+colnames(benchmarkPrices)<-'Benchmark.SP500.Returns'
+
+#merging portfolio and benchmark together
+EqWPort.Benchmark_df<-merge(portret_df, benchmarkPrices)
+#performance table 
+table.AnnualizedReturns(EqWPort.Benchmark_df, scale=252, Rf=0.015/252)
+```
+```{r}
+
+EqWPort.Benchmark_df<-data.frame(EqWPort.Benchmark_df)
+EqWPort.Benchmark_df<-cbind(Date=rownames(EqWPort.Benchmark_df),
+                            EqWPort.Benchmark_df)
+rownames(EqWPort.Benchmark_df)<-1:nrow(EqWPort.Benchmark_df)
+
+perf_fig<-EqWPort.Benchmark_df %>% plot_ly(x= ~Date,
+                                      y=~Porfolio.Eqw.Returns,
+                                      type='scatter',
+                                      mode='lines',
+                                      line = list(color='green',
+                                             width=0.8),
+                                 name='Portfolio', inherit = F,
+                                 width=900, height=600)
+perf_fig<-perf_fig %>% add_lines(x = ~Date,
+                                 y = ~Benchmark.SP500.Returns,
+                                 line = list(color='blue',
+                                             width=0.8),
+                                 name='S&P500', inherit = F)
+
+#starting data
+dt<-'2018-2-1'
+#today's date
+today_date<-Sys.Date()
+
+#layout
+perf_fig<- perf_fig %>% layout(
+  title=list(text=paste0('Portfolio - S&P500',': ',dt,' - ',as.character(today_date)),
+               font=list(size=22), y = 0.97),
+  xaxis=list(type='date', tickformat = "%d %B <br>%Y",
+               title=FALSE, tickfont=list(size=14)),
+  yaxis=list(title="Returns", titlefont=list(size=16),
+               tickfont=list(size=14))
+  
+)
+
+perf_fig
+
+```
