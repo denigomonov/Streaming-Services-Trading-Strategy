@@ -9,3 +9,17 @@
 For this project I am using data from a trustworthy source - [Yahoo Finance](https://finance.yahoo.com/). Using Quantmod, `data.frame(getSymbols.yahoo('X', from=dt, auto.assign=F))`
 
 ---
+
+## Development:
+### R Markdown EDA (RStudio):
+- Preparing datasets for visual portfolio analysis by calculating relevant metrics such as SMA, EMA, Beta, Sharpe ratio, Doji candle, Bollinger Bands and more
+- Creating _Candlestick_ plot with all metrics included from above to fully analyse each stock performance, price movements, changes and volume distribution
+- Outputing annualized performance and returns in table and _Line_ plot, and comparing equally weighted porfolio to S&P 500 benchmark
+- To be continued...
+
+### Deployment (Github Pages):
+- R Markdown notebook deployed as a `.html` file on Github Pages
+
+View [Quant Finance (Streaming Services Portfolio)](https://denigomonov.github.io/QuantFinance-Streaming-Services-Portfolio/Quantitative_Trading_R.nb.html)
+
+Gif to be added...
