@@ -16,7 +16,7 @@ For this project I am using data from a trustworthy source - [Yahoo Finance](htt
 - Creating _Candlestick_ plot with all metrics included from above to fully analyse each stock performance, price movements, changes and volume distribution
 - Outputing annualized performance and returns in table and _Line_ plot, and comparing equally weighted porfolio to S&P 500 benchmark
 - Feature engineering perfomed to retrieve daily Return, SMA-10, EMA-10, Upper Bolinger Band, Bottom Bolinger Band, Doji or Not, Webscrapping Article Score , Volume change, Volatility (*in progress*)
-- Creating and outputing performance of ML models in form of Support Vector Machine, Naive Bayes, Random Forest, and single layer Neural Network
+- Creating and outputing performance of ML models in form of Support Vector Machine, Naive Bayes, Random Forest, and single layer Neural Network (*in progress*)
 
 ### Deployment (Github Pages):
 - R Markdown notebook deployed as a `.html` file on Github Pages
