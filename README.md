@@ -23,4 +23,4 @@ For this project I am using data from a trustworthy source - [Yahoo Finance](htt
 
 View [Quant Finance (Streaming Services Portfolio)](https://denigomonov.github.io/QuantFinance-Streaming-Services-Portfolio/Quantitative_Trading_R.nb.html)
 
-GIF
+<img src="https://user-images.githubusercontent.com/34199193/102677617-3c143800-4171-11eb-86d1-290079b17f7e.gif" width="600" >
