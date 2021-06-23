@@ -1,7 +1,7 @@
 # Netflix-Trading-Strategy
 
 ## Project Goal:
-2020 brought a lot of changes into the world and some things became more popular than ever - streaming services are almost a necessity today. Consumers are not going outside and investors would want to look into streaming stocks. Therefore, in this project, I wanted to improve my quantitative finance skills and dive into the recent boom streaming stocks experienced, specifically analyzing Netflix (NFLX). Throughout this project, I was able to build visualizations from the scratch, perform feature engineering and fine-tune ML models for buy/sell signal trains. Overall, it was a great way to truly learn and showcase financial engineering.
+2020 brought a lot of changes into the world and some things became more popular than ever - streaming services are almost a necessity today. Consumers are not going outside and investors would want to look into streaming stocks. Therefore, in this project, I wanted to improve my quantitative finance skills and dive into the recent boom streaming stocks experienced, specifically analyzing Netflix (NFLX). Throughout this project, I was able to build visualizations from the scratch, perform feature engineering and fine-tune ML models for buy/sell signals classifications. Overall, it was a great way to truly learn and showcase financial engineering.
 
 ---
 
