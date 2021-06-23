@@ -1,26 +1,27 @@
 # Streaming-Services-Netflix-Trading-Strategy
 
 ## Project Goal:
-2020 brought a lot of changes into the world and some things became more popular than ever - streaming services are almost a necessity today. Consumers are not going outside and investors would want to look into streaming stocks. Therefore, in this project I wanted to improve my quantitative finance skills in R and look and the current boom streaming stocks are experiencing, specifically analysing AAPL, NFLX, ROKU, SPOT, DIS. Using Plotly and building visualizations from the scratch, applying Quantmod functions for performance analysis, and implementing feature engineering for ML models to perform adequte forecasting was a great way to truly learn and showcase financial engineering. 
+2020 brought a lot of changes into the world and some things became more popular than ever - streaming services are almost a necessity today. Consumers are not going outside and investors would want to look into streaming stocks. Therefore, in this project, I wanted to improve my quantitative finance skills and dive into the recent boom streaming stocks experienced, specifically analyzing Netflix (NFLX). Throughout this project, I was able to build visualizations from the scratch, perform feature engineering and fine-tune ML models for buy/sell signal trains. Overall, it was a great way to truly learn and showcase financial engineering.
 
 ---
 
 ## Portfolio Data:
-For this project I am using data from a trustworthy source - [Yahoo Finance](https://finance.yahoo.com/). Using Quantmod, `data.frame(getSymbols.yahoo('X', from=dt, auto.assign=F))`
+For this project I am using data from a trustworthy source - [Yahoo Finance](https://finance.yahoo.com/).
 
 ---
 
 ## Development:
-### R Markdown EDA (RStudio):
-- Preparing datasets for visual portfolio analysis by calculating relevant metrics such as SMA, EMA, Beta, Sharpe ratio, Doji candle, Bollinger Bands and more
-- Creating _Candlestick_ plot with all metrics included from above to fully analyse each stock performance, price movements, changes and volume distribution
-- Outputing annualized performance and returns in table and _Line_ plot, and comparing equally weighted porfolio to S&P 500 benchmark
-- Feature engineering perfomed to retrieve daily Return, SMA-10, EMA-10, Upper Bolinger Band, Bottom Bolinger Band, Doji or Not, Webscrapping Article Score , Volume change, Volatility (*in progress*)
-- Creating and outputing performance of ML models in form of Support Vector Machine, Naive Bayes, Random Forest, and single layer Neural Network (*in progress*)
+### EDA:
+- Preparing the NFLX dataset for visual portfolio analysis by performing feature engineering via calculating relevant metrics such as SMA, EMA, Rate of Change, Relative Strength Index, Sharpe ratio, Doji candle, Bollinger Bands, and more
+- Creating dynamic _Candlestick_ plot with all metrics included from above to fully analyze each stock performance, price movements, changes, and volume distribution over time
+- Creating dynamic _RSI_ plot with Oversold/Overbought Indicators showcasing how many times the stock was oversold or overbought over time
 
-### Deployment (Github Pages):
-- R Markdown notebook deployed as a `.html` file on Github Pages
+add img here
 
-View [Quant Finance (Streaming Services Portfolio)](https://denigomonov.github.io/QuantFinance-Streaming-Services-Portfolio/Quantitative_Trading_R.nb.html)
+### Machine Learning:
+- Establishing a buy/sell signal over the comparison of the short-term and long-term price trends, indicating 1230 buy and 813 sell signals
+- Creating a list consisting of classification algorithms (Logistic Regression, KNeighbors Classifier, Decision Tree Classifier, Random Forest Classifier) and performing _k_-fold cross-validation indicating Random Forest Classifier (ensemble model) best performance
+-  Performing GridSearchCV on Random Forest model and determining best performance with an accuracy of 0.93, _entropy_ criterion, max depth of 10 and 40 estimators 
+- Using Random Forest Classifier with discovered parameters to output multilabel classification accuracy score of 0.91
 
-<img src="https://user-images.githubusercontent.com/34199193/102677617-3c143800-4171-11eb-86d1-290079b17f7e.gif" width="600" >
+add img here
