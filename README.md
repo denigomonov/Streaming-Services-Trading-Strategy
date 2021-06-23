@@ -16,7 +16,8 @@ For this project I am using data from a trustworthy source - [Yahoo Finance](htt
 - Creating dynamic _Candlestick_ plot with all metrics included from above to fully analyze each stock performance, price movements, changes, and volume distribution over time
 - Creating dynamic _RSI_ plot with Oversold/Overbought Indicators showcasing how many times the stock was oversold or overbought over time
 
-add img here
+<img src="https://user-images.githubusercontent.com/34199193/123125600-a48cec00-d416-11eb-9045-f9d25f6a84c1.gif">
+
 
 ### Machine Learning:
 - Establishing a buy/sell signal over the comparison of the short-term and long-term price trends, indicating 1230 buy and 813 sell signals
@@ -24,4 +25,5 @@ add img here
 -  Performing GridSearchCV on Random Forest model and determining best performance with an accuracy of 0.93, _entropy_ criterion, max depth of 10 and 40 estimators 
 - Using Random Forest Classifier with discovered parameters to output multilabel classification accuracy score of 0.91
 
-add img here
+<img src="https://user-images.githubusercontent.com/34199193/123126334-4d3b4b80-d417-11eb-8a76-4ba63b8426bd.png" width=600>
+
