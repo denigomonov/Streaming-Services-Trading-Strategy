@@ -14,7 +14,7 @@ For this project I am using data from a trustworthy source - [Yahoo Finance](htt
 ### EDA:
 - Preparing the NFLX dataset for visual portfolio analysis by performing feature engineering via calculating relevant metrics such as SMA, EMA, Rate of Change, Relative Strength Index, Sharpe ratio, Doji candle, Bollinger Bands, and more
 - Creating dynamic _Candlestick_ plot with all metrics included from above to fully analyze each stock performance, price movements, changes, and volume distribution over time
-- Creating dynamic _RSI_ plot with Oversold/Overbought Indicators showcasing how many times the stock was oversold or overbought over time
+- Creating dynamic _RSI_ plot with Oversold/Overbought Indicators showcasing how many times the stock was oversold or overbought over time (Plotly lib)
 
 <img src="https://user-images.githubusercontent.com/34199193/123125600-a48cec00-d416-11eb-9045-f9d25f6a84c1.gif">
 
